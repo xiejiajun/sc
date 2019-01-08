@@ -11,11 +11,11 @@
 -   由于独享模式集群本身就处于阿里云的VPC网络，因此无需进行VPC访问授权。
 -   VPC访问授权后，实时计算访问对应的存储资源可能存在带宽受限等性能问题，一般不建议使用。
 
-## VPC访问授权 {#section_c3c_swz_zfb .section}
+## 实时计算VPC访问授权 {#section_c3c_swz_zfb .section}
 
 在实时计算开发平台界面，点击右上方账号，选择**项目管理** \> **VPC访问授权**，即可进入**VPC访问授权**界面。
 
-![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154391696433653_zh-CN.png)
+![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154690928233653_zh-CN.png)
 
 以VPC下的RDS为例:
 
@@ -27,20 +27,28 @@
 
     选择RDS所在的地域。
 
--   VPC ID/Instance ID
+-   VPC ID和Instance ID
 
-    登录[RDS控制台](https://rdsnew.console.aliyun.com/?spm=a2c4g.11186623.2.20.42313d2betYPAZ#/rdsList/cn-shanghai/basic/) ，在 实例列表 \> 基本信息查找实例的VPC ID/Instance ID信息，如下图：
+    登录[RDS控制台](https://rdsnew.console.aliyun.com/?spm=a2c4g.11186623.2.20.42313d2betYPAZ#/rdsList/cn-shanghai/basic/) ，在 **实例列表** \> **基本信息**查找实例的VPC ID和Instance ID信息，如下图：
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154391696433654_zh-CN.png)
+    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154690928233654_zh-CN.png)
 
 -   Instance Port
 
-    登录[RDS控制台](https://rdsnew.console.aliyun.com/?spm=a2c4g.11186623.2.22.42313d2betYPAZ#/rdsList/cn-shanghai/basic/) ，在 实例列表 \> 基本信息 \> 管理 \> 基本信息 \> 内网端口查询端口ID。如下图：
+    登录[RDS控制台](https://rdsnew.console.aliyun.com/?spm=a2c4g.11186623.2.22.42313d2betYPAZ#/rdsList/cn-shanghai/basic/) ，在 **实例列表** \> **基本信息** \> **管理** \> **基本信息** \> **内网端口**查询端口ID。如下图：
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154391696433655_zh-CN.png)
+    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154690928233655_zh-CN.png)
 
 
 VPC访问授权成功后，如下图所示：
 
-![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154391696433656_zh-CN.png)
+![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154690928233656_zh-CN.png)
+
+**说明：** 
+
+当使用的是VPC下的存储时，URL需填写VPC授权页面的Mapping IP：Mapping Port。以RDS为例：URL=`'jdbc:mysql//Mapping IP:Mapping Port/库名'`。
+
+Mapping IP和Mapping Port的查询如下图:
+
+![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40858/154690928236284_zh-CN.png)
 
