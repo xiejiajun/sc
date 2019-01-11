@@ -53,10 +53,12 @@ create table es_stream_sink(
 |multiThread|是否开启 JestClient 多线程|true|否|
 |ignoreWriteError|是否忽略写入异常|false|否|
 |settings|创建index的settings配置|无|否|
-|updateMode|指定 primary key 后的更新模式|full（-   full：全量覆盖
+|updateMode|指定 primary key 后的更新模式|full**说明：** 
+
+-   full：全量覆盖
 -   inc：增量更新
 
-）|否|
+|否|
 
 ## 动态索引相关 WITH 参数 {#section_pyd_qms_jgb .section}
 
