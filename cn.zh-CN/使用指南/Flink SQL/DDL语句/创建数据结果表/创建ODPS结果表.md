@@ -7,22 +7,18 @@
 实时计算支持使用ODPS 作为结果输出。示例代码如下：
 
 ```language-sql
-CREATE TABLE stream_test_hotline_agent (
-id INTEGER,
-len BIGINT,
-content varchar
-) WITH (
-type='mq',
-endpoint='xxxxxx',
-accessID='xxxxxx',
-accessKey='xxxxxx',
-topic='xxxxxx',
-producerGroup='xxxxxx',
-tag='xxxxxx',
-encoding='utf-8',
-fieldDelimiter=',',
-retryTimes='5',
-sleepTimeMs='500'
+create table odps_output(
+    id int,
+    user_name VARCHAR,
+    content VARCHAR
+) with (
+    type = 'odps',
+    endPoint = 'xxx',
+    project = 'xxx',
+    tableName = 'xx',
+    accessId = 'xx',
+    accessKey = 'xxx',
+    `partition` = 'xx'
 );
 
 ```
