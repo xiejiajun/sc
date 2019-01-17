@@ -40,11 +40,13 @@ create table odps_output(
 
 ## 常见问题 {#section_lsc_fgz_lgb .section}
 
-1.  Q: Stream模式的ODPS Sink是否支持isOverwrite为true的情况？
+1.  Q: Stream模式的ODPS Sink是否支持`isOverwrite`为`true`的情况？
 
-    isOverwrite为true，写入sink之前会把结果表或者结果数据清空。具体来说，就是每次启动后和暂停恢复后，写入之前会把原来结果表或者结果分区里的内容删除掉。流上暂停恢复后清空数据会导致丢数据。
+    A：`isOverwrite`为`true`，写入sink之前会把结果表或者结果数据清空。具体来说，就是每次启动后和暂停恢复后，写入之前会把原来结果表或者结果分区里的内容删除掉。流上暂停恢复后清空数据会导致丢数据。
 
-2.  Q: MaxCompute中的数据类型和Blink中数据类型的对应关系是什么？
+2.  Q: MaxCompute中的数据类型和实时计算中数据类型的对应关系是什么？
+
+    A：如下表。
 
     |MaxCompute|Blink|
     |----------|-----|
