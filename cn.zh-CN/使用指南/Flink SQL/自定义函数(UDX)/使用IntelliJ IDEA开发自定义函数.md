@@ -49,24 +49,24 @@
 
 3.  打开IntelliJ IDEA，点击**Open**打开以上Demo即可。
 
-    ![打开demo](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154813506934496_zh-CN.png)
+    ![打开demo](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154831046834496_zh-CN.png)
 
 
-## 创建一个Package {#section_lkh_1dy_dgb .section}
-
-操作如下图所示。
-
-![image.png | left | 747x442](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154813507034497_zh-CN.png)
-
-本文以com.hjc.test.blink.sql.udx为例，如下图所示。
-
-![image.png | left | 405x80](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154813507034503_zh-CN.png)
-
-## 创建一个Class {#section_ksv_1dy_dgb .section}
+## 创建Package {#section_lkh_1dy_dgb .section}
 
 操作如下图所示。
 
-![image.png | left | 747x442](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154813507034498_zh-CN.png)
+![创建Package](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154831046834497_zh-CN.png)
+
+本文以`com.hjc.test.blink.sql.udx`为例，如下图所示。
+
+![package](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154831046834503_zh-CN.png)
+
+## 创建Class {#section_ksv_1dy_dgb .section}
+
+操作如下图所示。
+
+![创建Class](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154831046834498_zh-CN.png)
 
 ## 将代码粘贴进Class中测试 {#section_crt_bdy_dgb .section}
 
@@ -114,7 +114,7 @@ mvn assembly:assembly   --(若需要将第三方依赖打入JAR包，请使用�
 
 ```
 
-编译后的JAR包为:
+编译后的JAR包为：
 
  RealtimeCompute-udxDemo/target/RTCompute-udx-1.0-SNAPSHOT.jar或
 
@@ -126,14 +126,14 @@ mvn assembly:assembly   --(若需要将第三方依赖打入JAR包，请使用�
 
 1.  **资源引用**中点击**+**。
 
-    ![image.png | left | 747x302](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154813507034499_zh-CN.png)
+    ![资源引用](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154831046934499_zh-CN.png)
 
 2.  如下图所示输入资源信息。点击**上传资源**。
 
-    ![image.png | left | 747x410](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154813507034500_zh-CN.png)
+    ![上传资源](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154831046934500_zh-CN.png)
 
 3.  点击**引用**。如下图所示输入**方法别名**以及**方法的全路径**。
 
-    ![image.png | left | 747x365](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154813507034501_zh-CN.png)
+    ![引用](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41061/154831046934501_zh-CN.png)
 
 
