@@ -57,12 +57,12 @@ DEFINE {patternVariable AS patternDefinationExpression [, patternVariable AS pat
 
     默认为贪婪匹配。比如对于`pattern: A -> B+`，输入：`a b1, b2, b3`，输出为：`a b1, a b1 b2, a b1 b2 b3`。可以在quantifier符号后面加`？`来表示非贪婪匹配。
 
-    -   \*?
-    -   +?
-    -   \{n\}?
-    -   \{n,\}?
-    -   \{n, m\}?
-    -   \{,m\}?
+    -   `*?`
+    -   `+?`
+    -   `{n}?`
+    -   `{n,}?`
+    -   `{n, m}?`
+    -   `{,m}?`
     此时对于上面例子中的pattern及输入，产生的输出为：`a b1, a b2, a b1 b2, a b3, a b2 b3, a b1 b2 b3`。
 
     **说明：** 
@@ -116,12 +116,12 @@ DEFINE {patternVariable AS patternDefinationExpression [, patternVariable AS pat
 
 -   测试数据
 
-    |timestamp\(TIMESTAMP\)|card\_id\(VARCHAR\)|location\(VARCHAR\)|action\(VARCHAR\)|
-    |----------------------|-------------------|-------------------|-----------------|
-    |2018-04-13 12:00:00|1|WW|Tom|
-    |2018-04-13 12:05:00|1|WW1|Tom|
-    |2018-04-13 12:10:00|1|WW2|Tom|
-    |2018-04-13 12:20:00|1|WW|Tom|
+    |timestamp（TIMESTAMP）|card\_id\(VARCHAR\)|location（VARCHAR）|action（VARCHAR）|
+    |--------------------|-------------------|-----------------|---------------|
+    |`2018-04-13 12:00:00`|1|WW|Tom|
+    |`2018-04-13 12:05:00`|1|WW1|Tom|
+    |`2018-04-13 12:10:00`|1|WW2|Tom|
+    |`2018-04-13 12:20:00`|1|WW|Tom|
 
 -   测试案例语法
 
@@ -176,9 +176,9 @@ DEFINE {patternVariable AS patternDefinationExpression [, patternVariable AS pat
 
 -   测试结果
 
-    |start\_timestamp\(TIMESTAMP\)|end\_timestamp\(TIMESTAMP\)|card\_id\(VARCHAR\)|event\(VARCHAR\)|
-    |-----------------------------|---------------------------|-------------------|----------------|
-    |2018-04-13 20:00:00.0|2018-04-13 20:05:00.0|1|Tom|
-    |2018-04-13 20:05:00.0|2018-04-13 20:10:00.0|1|Tom|
+    |start\_timestamp（TIMESTAMP）|end\_timestamp（TIMESTAMP）|card\_id（VARCHAR）|event（VARCHAR）|
+    |---------------------------|-------------------------|-----------------|--------------|
+    |`2018-04-13 20:00:00.0`|`2018-04-13 20:05:00.0`|1|Tom|
+    |`2018-04-13 20:05:00.0`|`2018-04-13 20:10:00.0`|1|Tom|
 
 
