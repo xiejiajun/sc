@@ -45,13 +45,13 @@ Flink SQL中对OVER Window的定义遵循标准SQL的定义语法，传统OVER W
 
     Unbounded ROWS OVER Window数据如下图所示。
 
-    ![UnBounded ROWS OVER Window](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40915/154806178834339_zh-CN.png)
+    ![UnBounded ROWS OVER Window](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40915/154831044334339_zh-CN.png)
 
     **说明：** 上图所示窗口user1的w7和w8，user2的窗口w3和w4，虽然元素都是同一时刻到达，但是它们仍然是在不同的窗口，这一点有别于RANGE OVER Window。
 
     Bounded ROWS OVER Window数据以3个元素（2 PRECEDING）的窗口为例，如下图所示。
 
-    ![Bounded ROWS OVER Window](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40915/154806178834340_zh-CN.png)
+    ![Bounded ROWS OVER Window](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40915/154831044334340_zh-CN.png)
 
     **说明：** 上图所示窗口user1的w5和w6，user2的窗口w2和w3，虽然有元素都是同一时刻到达，但是它们仍然是在不同的窗口，这一点有别于RANGE OVER Window。
 
@@ -79,14 +79,14 @@ Flink SQL中对OVER Window的定义遵循标准SQL的定义语法，传统OVER W
 
     |商品ID|商品类型|上架时间|销售价格|
     |----|----|----|----|
-    |ITEM001|Electronic|2017-11-11 10:01:00|20|
-    |ITEM002|Electronic|2017-11-11 10:02:00|50|
-    |ITEM003|Electronic|2017-11-11 10:03:00|30|
-    |ITEM004|Electronic|2017-11-11 10:03:00|60|
-    |ITEM005|Electronic|2017-11-11 10:05:00|40|
-    |ITEM006|Electronic|2017-11-11 10:06:00|20|
-    |ITEM007|Electronic|2017-11-11 10:07:00|70|
-    |ITEM008|Clothes|2017-11-11 10:08:00|20|
+    |ITEM001|Electronic|`2017-11-11 10:01:00`|20|
+    |ITEM002|Electronic|`2017-11-11 10:02:00`|50|
+    |ITEM003|Electronic|`2017-11-11 10:03:00`|30|
+    |ITEM004|Electronic|`2017-11-11 10:03:00`|60|
+    |ITEM005|Electronic|`2017-11-11 10:05:00`|40|
+    |ITEM006|Electronic|`2017-11-11 10:06:00`|20|
+    |ITEM007|Electronic|`2017-11-11 10:07:00`|70|
+    |ITEM008|Clothes|`2017-11-11 10:08:00`|20|
 
      **测试代码** 
 
@@ -120,14 +120,14 @@ Flink SQL中对OVER Window的定义遵循标准SQL的定义语法，传统OVER W
 
     |itemID|itemType|onSellTime|price|maxPrice|
     |------|--------|----------|-----|--------|
-    |ITEM001|Electronic|2017-11-11 10:01:00|20|20|
-    |ITEM002|Electronic|2017-11-11 10:02:00|50|50|
-    |ITEM003|Electronic|2017-11-11 10:03:00|30|50|
+    |ITEM001|Electronic|`2017-11-11 10:01:00`|20|20|
+    |ITEM002|Electronic|`2017-11-11 10:02:00`|50|50|
+    |ITEM003|Electronic|`2017-11-11 10:03:00`|30|50|
     |ITEM004|Electronic|2017-11-11 10:03:00|60|60|
-    |ITEM005|Electronic|2017-11-11 10:05:00|40|60|
-    |ITEM006|Electronic|2017-11-11 10:06:00|20|60|
-    |ITEM007|Electronic|2017-11-11 10:07:00|70|70|
-    |ITEM008|Clothes|2017-11-11 10:08:00|20|20|
+    |ITEM005|Electronic|`2017-11-11 10:05:00`|40|60|
+    |ITEM006|Electronic|`2017-11-11 10:06:00`|20|60|
+    |ITEM007|Electronic|`2017-11-11 10:07:00`|70|70|
+    |ITEM008|Clothes|`2017-11-11 10:08:00`|20|20|
 
 
 ## RANGE OVER Window语义 {#section_o3z_syv_cgb .section}
@@ -138,13 +138,13 @@ Flink SQL中对OVER Window的定义遵循标准SQL的定义语法，传统OVER W
 
      **Unbounded RANGE OVER Window** 数据如下图所示。
 
-    ![UnBounded RANGE OVER Window](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40915/154806178834341_zh-CN.png)
+    ![UnBounded RANGE OVER Window](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40915/154831044334341_zh-CN.png)
 
     > 注意: 上图所示窗口user1的w7， user2的窗口w3 ，两个元素同一时刻到达，他们属于相同的window，这一点有别于ROWS OVER Window。
 
      **Bounded RANGE OVER Window** 数据，以3秒中数据`(INTERVAL '2' SECOND)`的窗口为例，如下图所示。
 
-    ![Bounded RANGE OVER Window](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40915/154806178834342_zh-CN.png)
+    ![Bounded RANGE OVER Window](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/40915/154831044334342_zh-CN.png)
 
     **说明：** 上图所示窗口user1的w6， user2的窗口w3，元素都是同一时刻到达，他们属于相同的window，这一点有别于ROWS OVER Window。
 
@@ -173,14 +173,14 @@ Flink SQL中对OVER Window的定义遵循标准SQL的定义语法，传统OVER W
 
     |商品ID|商品类型|上架时间|销售价格|
     |----|----|----|----|
-    |ITEM001|Electronic|2017-11-11 10:01:00|20|
-    |ITEM002|Electronic|2017-11-11 10:02:00|50|
-    |ITEM003|Electronic|2017-11-11 10:03:00|30|
-    |ITEM004|Electronic|2017-11-11 10:03:00|60|
-    |ITEM005|Electronic|2017-11-11 10:05:00|40|
-    |ITEM006|Electronic|2017-11-11 10:06:00|20|
-    |ITEM007|Electronic|2017-11-11 10:07:00|70|
-    |ITEM008|Clothes|2017-11-11 10:08:00|20|
+    |ITEM001|Electronic|`2017-11-11 10:01:00`|20|
+    |ITEM002|Electronic|`2017-11-11 10:02:00`|50|
+    |ITEM003|Electronic|`2017-11-11 10:03:00`|30|
+    |ITEM004|Electronic|`2017-11-11 10:03:00`|60|
+    |ITEM005|Electronic|`2017-11-11 10:05:00`|40|
+    |ITEM006|Electronic|`2017-11-11 10:06:00`|20|
+    |ITEM007|Electronic|`2017-11-11 10:07:00`|70|
+    |ITEM008|Clothes|`2017-11-11 10:08:00`|20|
 
      **测试代码** 
 
@@ -215,13 +215,13 @@ Flink SQL中对OVER Window的定义遵循标准SQL的定义语法，传统OVER W
 
     |itemID|itemType|onSellTime|price|maxPrice|
     |------|--------|----------|-----|--------|
-    |ITEM001|Electronic|2017-11-11 10:01:00|20|20|
-    |ITEM002|Electronic|2017-11-11 10:02:00|50|50|
-    |ITEM003|Electronic|2017-11-11 10:03:00|30|50|
-    |ITEM004|Electronic|2017-11-11 10:03:00|60|60|
-    |ITEM005|Electronic|2017-11-11 10:05:00|40|60|
-    |ITEM006|Electronic|2017-11-11 10:06:00|20|40|
-    |ITEM007|Electronic|2017-11-11 10:07:00|70|70|
-    |ITEM008|Clothes|2017-11-11 10:08:00|20|20|
+    |ITEM001|Electronic|`2017-11-11 10:01:00`|20|20|
+    |ITEM002|Electronic|`2017-11-11 10:02:00`|50|50|
+    |ITEM003|Electronic|`2017-11-11 10:03:00`|30|50|
+    |ITEM004|Electronic|`2017-11-11 10:03:00`|60|60|
+    |ITEM005|Electronic|`2017-11-11 10:05:00`|40|60|
+    |ITEM006|Electronic|`2017-11-11 10:06:00`|20|40|
+    |ITEM007|Electronic|`2017-11-11 10:07:00`|70|70|
+    |ITEM008|Clothes|`2017-11-11 10:08:00`|20|20|
 
 
