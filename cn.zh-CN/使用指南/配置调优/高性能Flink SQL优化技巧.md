@@ -35,17 +35,17 @@
 
     LocalGlobal本质上能够靠localAgg聚合掉倾斜的数据，从而降低globalAgg的热点，从而提升性能。LocalGlobal如何解决数据倾斜问题可以结合下图理解。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/75347/154814958933642_zh-CN.png)
+    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/75347/154831049433642_zh-CN.png)
 
     -   适用场景
 
-        LocalGlobal 适用于提升如SUM、COUNT, MAX, MIN, AVG等普通agg上的性能，以及解决这些场景下的数据热点问题。
+        LocalGlobal适用于提升如SUM、COUNT、MAX、MIN和AVG等普通agg上的性能，以及解决这些场景下的数据热点问题。
 
         **说明：** 开启LocalGlobal需要UDAF实现merge方法。
 
     -   开启方式
 
-        在 实时计算2.0 版本开始，LocalGlobal是默认开启的，参数是: `blink.localAgg.enabled=true`，但是需要在microbatch/minibatch开启的前提下才能生效。
+        在 实时计算2.0版本开始，LocalGlobal是默认开启的，参数是： `blink.localAgg.enabled=true`，但是需要在microbatch/minibatch开启的前提下才能生效。
 
     -   如何判断是否生效
 
@@ -55,7 +55,7 @@
 
     上述的LocalGlobal优化能针对常见普通agg有较好的效果（如SUM、COUNT、MAX、MIN和AVG）。但是对于count distinct收效不明显，原因是count distinct在local 聚合时，对于distinct key的去重率不高，导致在global节点仍然存在热点。
 
-    在旧版本用户为了解决count distinct 的热点问题时，一般会手动改写成两层聚合（增加按distinct key 取模的打散层），自 2.2.0版本开始，实时计算提供了count distinct自动打散，我们称之为PartialFinal优化，用户无需自己改写成两层聚合。和 LocalGlobal 的原理对比请结合下图理解。![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/75347/154814958933643_zh-CN.png)
+    在旧版本用户为了解决count distinct 的热点问题时，一般会手动改写成两层聚合（增加按distinct key 取模的打散层），自2.2.0版本开始，实时计算提供了count distinct自动打散，我们称之为PartialFinal优化，用户无需自己改写成两层聚合。和 LocalGlobal 的原理对比请结合下图理解。![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/75347/154831049433643_zh-CN.png)
 
     -   适用场景
 
@@ -212,7 +212,7 @@
 
 -   KEY VALUE 函数使用单字符的分隔符
 
-    KEY VALUE 的签名是：KEYVALUE\(content, keyValueSplit, keySplit, keyName\)，当keyValueSplit和KeySplit是单字符时，如`:`,`,`会使用优化的算法，会在二进制数据上直接寻找所需的keyName 的值，而不会将整个 content做切分。性能约有30%提升。
+    KEY VALUE 的签名是：`KEYVALUE(content, keyValueSplit, keySplit, keyName)`，当keyValueSplit和KeySplit是单字符时，如`:`、`,`会使用优化的算法，会在二进制数据上直接寻找所需的keyName 的值，而不会将整个content做切分。性能约有30%提升。
 
 -   多KEYVALUE场景使用MULTI\_KEYVALUE
 
