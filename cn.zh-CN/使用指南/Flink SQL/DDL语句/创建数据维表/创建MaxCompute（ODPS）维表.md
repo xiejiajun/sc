@@ -31,6 +31,7 @@ CREATE TABLE white_list (
 **说明：** 
 
 -   声明维表时，必须要指名主键，维表JOIN的时候，ON的条件必须包含所有主键的等值条件。
+-   ODPS维表主键必须有唯一性，否则会被去重。
 -   `parition`是关键字，使用时需要使用反引号注释``partition``。
 -   如果是分区表，目前不支持将分区列写入到schema定义中。
 
@@ -68,7 +69,7 @@ ALL: 全量缓存策略。即在Job运行前会将远程表中所有数据load�
 2.  搜索表名。
 3.  在数据表详情界面的**明细信息** \> **分区信息**中进行查看。例如：[adm\_dim\_csn\_trans\_shift](https://meta.dw.alibaba-inc.com/store/table/table_detail.html?guid=odps.cndata.adm_dim_csn_trans_shift#/tableDetails/partitionInfo)的分区是`ds=20180905`
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/106707/154771792237584_zh-CN.png)
+    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/106707/154839518137584_zh-CN.png)
 
     。
 
