@@ -35,7 +35,7 @@
 
     LocalGlobal本质上能够靠localAgg聚合掉倾斜的数据，从而降低globalAgg的热点，从而提升性能。LocalGlobal如何解决数据倾斜问题可以结合下图理解。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/75347/154831049433642_zh-CN.png)
+    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/75347/154856412633642_zh-CN.png)
 
     -   适用场景
 
@@ -45,7 +45,7 @@
 
     -   开启方式
 
-        在 实时计算2.0版本开始，LocalGlobal是默认开启的，参数是： `blink.localAgg.enabled=true`，但是需要在microbatch/minibatch开启的前提下才能生效。
+        在 实时计算`2.0`版本开始，LocalGlobal是默认开启的，参数是： `blink.localAgg.enabled=true`，但是需要在microbatch/minibatch开启的前提下才能生效。
 
     -   如何判断是否生效
 
@@ -55,7 +55,7 @@
 
     上述的LocalGlobal优化能针对常见普通agg有较好的效果（如SUM、COUNT、MAX、MIN和AVG）。但是对于count distinct收效不明显，原因是count distinct在local 聚合时，对于distinct key的去重率不高，导致在global节点仍然存在热点。
 
-    在旧版本用户为了解决count distinct 的热点问题时，一般会手动改写成两层聚合（增加按distinct key 取模的打散层），自2.2.0版本开始，实时计算提供了count distinct自动打散，我们称之为PartialFinal优化，用户无需自己改写成两层聚合。和 LocalGlobal 的原理对比请结合下图理解。![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/75347/154831049433643_zh-CN.png)
+    在旧版本用户为了解决count distinct 的热点问题时，一般会手动改写成两层聚合（增加按distinct key 取模的打散层），自`2.2.0`版本开始，实时计算提供了count distinct自动打散，我们称之为PartialFinal优化，用户无需自己改写成两层聚合。和 LocalGlobal 的原理对比请结合下图理解。![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/75347/154856412633643_zh-CN.png)
 
     -   适用场景
 
@@ -75,7 +75,7 @@
 
 -   改写成 agg with filter 语法（提升大量count distinct场景性能）
 
-    **说明：** 仅支持实时计算2.2.2 及以上版本。
+    **说明：** 仅支持实时计算`2.2.2` 及以上版本。
 
     有一些统计作业会计算各种维度的UV，比如全网UV、来自手淘的UV、来自PC的UV等等。很多用户都是用Case When来实现这种多维度统计的功能，但是建议使用更标准的agg with filter语法，因为实时计算目前的SQL优化器能分析出filter 参数，从而同一个字段上计算不同条件下的count distinct能共享state，减少对state的读写操作。性能测试中有一倍的性能提升。
 
@@ -107,7 +107,7 @@
 
 -   order by sum（正数）desc 时，要加上正数的过滤条件
 
-    且已知 sum 的参数不可能有负数，那么需要加上过滤条件从而告诉优化器这个信息，才能优化出 UpdateFastRank 算法（仅支持实时计算2.2.2及以上版本）。如下所示（注意 sum\(total\_fee\) filter ... ）
+    且已知 sum 的参数不可能有负数，那么需要加上过滤条件从而告诉优化器这个信息，才能优化出 UpdateFastRank 算法（仅支持实时计算`2.2.2`及以上版本）。如下所示（注意 sum\(total\_fee\) filter ... ）
 
     ```
     SELECT cate_id, seller_id, stat_date, pay_ord_amt  # 不输出 rownum 字段，能减小对结果表的输出量
@@ -148,7 +148,7 @@
 
 -   使用FirstRow语法替换 first\_value 函数
 
-    **说明：** 仅支持实时计算2.2.2及以上版本。
+    **说明：** 仅支持实时计算`2.2.2`及以上版本。
 
     FirstRow的作用是去重，且只保留该主键下第一条出现的数据，之后出现的数据会被丢弃掉。因为其state中只存储了key数据，所以替换first\_value函数后一般能有一倍的性能提升。
 
@@ -191,7 +191,7 @@
         
         ```
 
-    -   优化写法（使用 LastRow 语法）： 需要给源表增加 PRIMARY KEY属性，并加上 fetchFirstRow='false' 的配置。
+    -   优化写法（使用 LastRow 语法）： 需要给源表增加PRIMARY KEY属性，并加上 `fetchFirstRow='false'` 的配置。
 
         ```
         CREATETABLE tt_source (
@@ -216,7 +216,7 @@
 
 -   多KEYVALUE场景使用MULTI\_KEYVALUE
 
-    **说明：** 仅支持实时计算-2.2.2及以上版本
+    **说明：** 仅支持实时计算-`2.2.2`及以上版本
 
     如果在query中有对同一个content 做大量KEYVALUE 的操作，比如content中包含10个key-value对，希望把10个value 的值都取出来作为字段。用户经常会写10个KEY VALUE函数，那么就会对content 做10次解析。在这种场景建议使用 [MULTI\_KEYVALUE](cn.zh-CN/使用指南/Flink SQL/内置函数/表值函数/MULTI_KEYVALUE.md#)，这是一个表值函数。使用该函数可以只对content 做一次 split 解析。性能约有 50%~100%的性能提升。
 
@@ -247,7 +247,7 @@
 
 -   使用Rescale替代Rebalance
 
-    **说明：** 仅支持实时计算2.2.2及以上版本。
+    **说明：** 仅支持实时计算`2.2.2`及以上版本。
 
     例如上游是5个并发，下游是10个并发。当使用Rebalance时，上游每个并发会轮询发给下游10个并发。当使用Rescale时，上游每个并发只需轮询发给下游2个并发。因为 channel个数变少了，subpartition的buffer填充速度能变快，能提高网络效率。当上游的数据比较均匀时，且上下游的并发数成比例时，可以使用Rescale替换成 Rebalance。参数：`enable.rescale.shuffling=true`，默认关闭。
 
