@@ -13,7 +13,7 @@ CREATE TABLE tableName
 
 ## 说明 { .section}
 
-阿里云实时计算本身不带有数据存储功能，因此所有涉及表创建DDL的操作,实际上均是对于外部数据表、存储的引用声明，如下。
+阿里云实时计算本身不带有数据存储功能，因此所有涉及表创建DDL的操作，实际上均是对于外部数据表、存储的引用声明，如下。
 
 ```language-sql
 create table mq_stream(
@@ -75,7 +75,7 @@ create table mq_stream(
 
     **说明：** 如果外部数据存储的字段名称是大小写敏感类型（例如OTS），则在Flink SQL中需要在区分大小写的字段名称处使用`｀｀`进行转换。在DDL语法中，声明字段名和目标表的字段名需要名称完全一致。
 
-    Datahub定义的Schema如下:
+    Datahub定义的Schema如下：
 
     |字段名|类型|
     |---|--|
@@ -85,7 +85,7 @@ create table mq_stream(
 
     **说明：** DataHub中的STRING数据类型对应的是在实时计中的VARCHAR类型。算
 
-    我们推荐用户将所有列进行声明引用，注意可以少字段，不可以多字段。针对上述DataHub声明的DDL如下:
+    我们推荐用户将所有列进行声明引用，注意可以少字段，不可以多字段。针对上述DataHub声明的DDL如下：
 
     ```language-sql
     
@@ -107,7 +107,7 @@ create table mq_stream(
 
 ## 处理大小写敏感 {#section_n3j_ckx_bgb .section}
 
-SQL标准定义中，大小写是不敏感的，例如:
+SQL标准定义中，大小写是不敏感的，例如：
 
 ```language-sql
 create table stream_result (
@@ -127,7 +127,7 @@ create table STREAM_RESULT (
 
 ```
 
-但实时计算引用的大量外部数据源，可能要求大小写敏感。例如，TableStore对于大小写是敏感的。如果在TableStore定义了一个`NAME`的大写字段，我们应该如下定义:
+但实时计算引用的大量外部数据源，可能要求大小写敏感。例如，TableStore对于大小写是敏感的。如果在TableStore定义了一个`NAME`的大写字段，我们应该如下定义：
 
 ```language-sql
 create  table STREAM_RESULT (
@@ -137,7 +137,7 @@ create  table STREAM_RESULT (
 
 ```
 
-在之后所有的DML操作中，对于这个字段引用均需要添加反引号，如下:
+在之后所有的DML操作中，对于这个字段引用均需要添加反引号，如下：
 
 ```language-sql
 INSERT INTO xxx
