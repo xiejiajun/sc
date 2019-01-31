@@ -55,8 +55,34 @@ create table sink_kafka (
     -   如果您使用的Kafka是阿里云公测版，请参见[Kafka公测版准备配置文档](https://help.aliyun.com/document_detail/68345.html?spm=a2c4g.11186623.2.4.59355805yWzMDS)。
 -   可选配置参数
 
-    `"consumer.id","socket.timeout.ms","fetch.message.max.bytes","num.consumer.fetchers","auto.commit.enable","auto.commit.interval.ms","queued.max.message.chunks", "rebalance.max.retries","fetch.min.bytes","fetch.wait.max.ms","rebalance.backoff.ms","refresh.leader.backoff.ms","auto.offset.reset","consumer.timeout.ms","exclude.internal.topics","partition.assignment.strategy","client.id","zookeeper.session.timeout.ms","zookeeper.connection.timeout.ms","zookeeper.sync.time.ms","offsets.storage","offsets.channel.backoff.ms","offsets.channel.socket.timeout.ms","offsets.commit.max.retries","dual.commit.enabled","partition.assignment.strategy","socket.receive.buffer.bytes","fetch.min.bytes"` 
-
+    -   `consumer.id`
+    -   `socket.timeout.ms`
+    -   `fetch.message.max.bytes`
+    -   `num.consumer.fetchers`
+    -   `auto.commit.enable`
+    -   `auto.commit.interval.ms`
+    -   `queued.max.message.chunks`
+    -   `rebalance.max.retries`
+    -   `fetch.min.bytes`
+    -   `fetch.wait.max.ms`
+    -   `rebalance.backoff.ms`
+    -   `refresh.leader.backoff.ms`
+    -   `auto.offset.reset`
+    -   `consumer.timeout.ms`
+    -   `exclude.internal.topics`
+    -   `partition.assignment.strategy`
+    -   `client.id`
+    -   `zookeeper.session.timeout.ms`
+    -   `zookeeper.connection.timeout.ms`
+    -   `zookeeper.sync.time.ms`
+    -   `offsets.storage`
+    -   `offsets.channel.backoff.ms`
+    -   `offsets.channel.socket.timeout.ms`
+    -   `offsets.commit.max.retries`
+    -   `dual.commit.enabled`
+    -   `partition.assignment.strategy`
+    -   `socket.receive.buffer.bytes`
+    -   `fetch.min.bytes`
     **说明：** 其它可选配置项参考Kafka官方文档进行配置。
 
     -    [Kafka09](https://kafka.apache.org/0110/documentation.html#consumerconfigs) 
@@ -76,26 +102,30 @@ create table sink_kafka (
 
 ```language-sql
 create table datahub_input (
-    messageKey VARBINARY,
-    `message` VARBINARY
-) with (type = 'random');
-
-create table sink_kafka (
-    messageKey VARBINARY,
-    `message` VARBINARY,
-    PRIMARY KEY (messageKey)
+id VARCHAR,
+nm VARCHAR
 ) with (
-    type = 'kafka010',
-    topic = 'xxxxxx',
-    bootstrap.servers = 'xxxxxx'
+type = 'datahub'
 );
 
+create table sink_kafka (
+ messageKey VARBINARY,
+`message` VARBINARY,
+ PRIMARY KEY (messageKey)
+) with (
+    type = 'kafka010',
+    topic = 'xxxxxx',
+    bootstrap.servers = 'xxxxxx'
+);
+
+
 INSERT INTO
-    sink_kafka
+    sink_kafka
 SELECT
-   *
+   cast(id as VARBINARY) as messageKey,
+   cast(nm as VARBINARY) as `message`
 FROM
-    datahub_input;
+    datahub_input;
 
 ```
 
