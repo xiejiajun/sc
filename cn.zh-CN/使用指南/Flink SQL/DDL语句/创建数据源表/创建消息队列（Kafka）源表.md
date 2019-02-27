@@ -162,7 +162,7 @@ create table kafka_stream(
             from
                 kafka_src as S,
                 LATERAL TABLE (kafkapaser (`message`)) as T (
-                    ctime,
+                    name,
                     age,
                     grade,
                     updateTime
