@@ -36,7 +36,7 @@ create table odps_output(
 
 **说明：** 
 
-实时计算数据写入odps的方式是每次做checkPoint的时候将缓存数据进行输入。
+实时计算数据写入ODPS的方式是每次做checkPoint的时候将缓存数据进行输入。
 
 ## 常见问题 {#section_lsc_fgz_lgb .section}
 
@@ -59,11 +59,12 @@ create table odps_output(
     |BOOLEAN|BOOLEAN|
     |DATETIME|TIMESTAMP|
     |TIMESTAMP|TIMESTAMP|
-    |VARCHAR|VARCHAR|
-    |STRING|STRING|
+    |STRING|VARCHAR|
     |DECIMAL|DECIMAL|
     |BINARY|VARBINARY|
 
-    **说明：** 其他MaxCompute类型，ODPS connector暂时还没有支持转换。
+    **说明：** 
 
+    -   其他MaxCompute类型，ODPS connector暂时还不支持转换。
+    -   VARCHAR是ODPS新增加的类型，Blink connectors暂不支持，建议您将ODPS的Schema中的VARCHAR类型设置为STRING类型。
 
