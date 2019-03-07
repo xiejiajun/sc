@@ -8,17 +8,17 @@
 
 ```language-sql
 create table odps_output(
-    id int,
+    id INT,
     user_name VARCHAR,
     content VARCHAR
 ) with (
     type = 'odps',
     endPoint = 'xxx',
     project = 'xxx',
-    tableName = 'xx',
-    accessId = 'xx',
+    tableName = 'xxx',
+    accessId = 'xxx',
     accessKey = 'xxx',
-    `partition` = 'xx'
+    `partition` = 'xxx'
 );
 
 ```
@@ -27,12 +27,12 @@ create table odps_output(
 
 |参数|注释说明|备注|
 |--|----|--|
-|endPoint| |必选。参见[配置Endpoint](../../../../../cn.zh-CN/准备工作/配置Endpoint.md#)。|
-|project| |必选|
+|endPoint|ODPS服务地址|必选。参见[配置Endpoint](../../../../../cn.zh-CN/准备工作/配置Endpoint.md#)。|
+|project|ODPS项目名称|必选|
 |tableName|表名|必选|
-|accessId| |必选|
-|accessKey| |必选|
-|partition|写入分区|可选，分区表必填，具体分区信息到[数据地图](https://meta.dw.alibaba-inc.com/store/index.html)查看。例如: 一个表的分区信息为`ds=20180905`，则可以写 ``partition` = 'ds=20180905'`。多级分区之间用逗号分隔，示例: ``partition` = 'ds=20180912,dt=xxxyyy'`|
+|accessId|accessId|必选|
+|accessKey|accessKey|必选|
+|partition|分区名|可选，分区表必填，具体分区信息到[数据地图](https://meta.dw.alibaba-inc.com/store/index.html)查看。例如: 一个表的分区信息为`ds=20180905`，则可以写 ``partition` = 'ds=20180905'`。多级分区之间用逗号分隔，示例: ``partition` = 'ds=20180912,dt=xxxyyy'`|
 
 **说明：** 
 
