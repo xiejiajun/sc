@@ -36,7 +36,21 @@ CREATE TABLE white_list (
 -   如果是分区表，目前不支持将分区列写入到schema定义中。
 -   实时计算2.2.0及以上版本支持加载最新分区表，配置方法为`partition='max_pt()'`，`max_pt()`为所有分区的字典序最大值。
 
-## WITH参数 {#section_b5c_qzh_mgb .section}
+## WITH参数 {#section_glb_mqf_cgb .section}
+
+|参数|注释说明|备注|
+|--|----|--|
+|endPoint|ODPS服务地址|必选。参见[配置Endpoint](../../../../../cn.zh-CN/准备工作/配置Endpoint.md#)。|
+|project|ODPS项目名称|必选|
+|tableName|表名|必选|
+|accessId|accessId|必选|
+|accessKey|accessKey|必选|
+|partition|分区名|可选，分区表必填，具体分区信息到[数据地图](https://meta.dw.alibaba-inc.com/store/index.html)查看。例如: 一个表的分区信息为`ds=20180905`，则可以写 ``partition` = 'ds=20180905'`。多级分区之间用逗号分隔，示例: ``partition` = 'ds=20180912,dt=xxxyyy'`|
+|maxRowCount|可加载的最大表格数量|可选，默认为100000。**说明：** 如果您的数据超过100000，需要设置maxRowCount参数。建议设定值比实际值大。
+
+|
+
+## Cache参数 {#section_b5c_qzh_mgb .section}
 
 |参数|注释说明|备注|
 |--|----|--|
@@ -70,14 +84,14 @@ ALL: 全量缓存策略。即在Job运行前会将远程表中所有数据load�
 2.  搜索表名。
 3.  在数据表详情界面的**明细信息** \> **分区信息**中进行查看。例如：[adm\_dim\_csn\_trans\_shift](https://meta.dw.alibaba-inc.com/store/table/table_detail.html?guid=odps.cndata.adm_dim_csn_trans_shift#/tableDetails/partitionInfo)的分区是`ds=20180905`
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/106707/155116203337584_zh-CN.png)
+    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/106707/155192770737584_zh-CN.png)
 
     。
 
 
 ## 常见问题 {#section_r5d_g33_mgb .section}
 
-Q：任务出现了`RejectedExecutionException: Task java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTas`的failover该怎么处理？
+Q：任务出现了`RejectedExecutionException: Task java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTas`的Failover该怎么处理？
 
 A：实时计算1.x版本中维表JOIN存在一定的问题，推荐升级到2.1.1及以上实时计算版本。如果需要继续使用原有版本，需要对作业进行暂停恢复操作，根据failover history中第一次出现failover的具体报错信息进行排查。
 
