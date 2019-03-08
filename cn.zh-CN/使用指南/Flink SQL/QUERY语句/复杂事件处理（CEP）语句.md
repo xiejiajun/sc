@@ -68,8 +68,8 @@ DEFINE {patternVariable AS patternDefinationExpression [, patternVariable AS pat
     **说明：** 
 
     -   WITHIN 定义符合规则的事件序列的最大时间跨度。
-    -   静态窗口 格式：`INTERVAL ‘string’ timeUnit [ TO timeUnit ]` 示例：`INTERVAL ‘10’ SECOND, INTERVAL ‘45’ DAY, INTERVAL ‘10:20’ MINUTE TO SECOND, INTERVAL ‘10:20.10’ MINUTE TO SECOND, INTERVAL ‘10:20’ HOUR TO MINUTE, INTERVAL ‘1-5’ YEAR TO MONTH` 
-    -   动态窗口 格式： `INTERVAL intervalExpression` 示例： `INTERVAL A.windowTime + 10`，其中A为pattern定义中第一个patternVariable。 在intervalExpression的定义中，可以使用pattern定义中出现过的patternVariable。当前只能使用第一个patternVariable。intervalExpression中可以使用UDF，intervalExpression的结果必须为long，单位为millisecond，表示窗口的大小。
+    -   静态窗口格式：`INTERVAL ‘string’ timeUnit [ TO timeUnit ]` 示例：`INTERVAL ‘10’ SECOND, INTERVAL ‘45’ DAY, INTERVAL ‘10:20’ MINUTE TO SECOND, INTERVAL ‘10:20.10’ MINUTE TO SECOND, INTERVAL ‘10:20’ HOUR TO MINUTE, INTERVAL ‘1-5’ YEAR TO MONTH` 
+    -   动态窗口格式： `INTERVAL intervalExpression` 示例： `INTERVAL A.windowTime + 10`，其中A为pattern定义中第一个patternVariable。 在intervalExpression的定义中，可以使用pattern定义中出现过的patternVariable。当前只能使用第一个patternVariable。intervalExpression中可以使用UDF，intervalExpression的结果必须为long，单位为millisecond，表示窗口的大小。
     -   DEFINE 定义在PATTERN中出现的patternVariable的具体含义，若某个patternVariable在DEFINE中没有定义，则认为对于每一个事件，该patternVariable都成立。
 -   MEASURES和DEFINE语句函数
 
@@ -77,7 +77,7 @@ DEFINE {patternVariable AS patternDefinationExpression [, patternVariable AS pat
     |--|----|
     |Row Pattern Column References|形式为：`patternVariable.col`。表示访问`patternVariable`所对应的事件的指定的列。|
     |PREV|只能用在DEFINE语句中，一般与`Row Pattern Column References`合用。用于访问指定的pattern所对应的事件之前偏移指定的offset所对应的事件的指定的列。示例：对于`DOWN AS DOWN.price < PREV(DOWN.price)`，`PREV(A.price)`表示当前事件的前一个事件的`price`列的值。注意，`DOWN.price`等价于`PREV(DOWN.price, 0)`。 `PREV(DOWN.price)`等价于`PREV(DOWN.price, 1)`。|
-    |FIRST、LAST|一般与`Row Pattern Column References`合用，用于访问指定的`PATTERN`所对应的事件序列中的指定偏移位置的事件。示例：`FIRST(A.price, 3)`表示`PATTERN A`所对应的事件序列中的第3个事件。`LAST(A.price, 3)`表示`PATTERN A`所对应的事件序列中的倒数第3个事件。|
+    |FIRST、LAST|一般与`Row Pattern Column References`合用，用于访问指定的`PATTERN`所对应的事件序列中的指定偏移位置的事件。示例：`FIRST(A.price, 3)`表示`PATTERN A`所对应的事件序列中的第4个事件。`LAST(A.price, 3)`表示`PATTERN A`所对应的事件序列中的倒数第4个事件。|
 
 -   输出列
 
