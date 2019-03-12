@@ -34,19 +34,19 @@ WHERE条件的限制
 
 为了使Flink SQL能识别出这是一个TopN的query，外层循环中必须要指定 `rownum <= N`的格式来指定前N条记录，不能使用`rownum - 5 <= N` 这种将`rownum`至于某个表达式中。当然，WHERE条件中，可以额外带上其他条件，但是必须是以`AND`连接。
 
-## 示例一 {#section_k54_xdt_cgb .section}
+## 示例1 {#section_k54_xdt_cgb .section}
 
 如下示例，先统计查询流中每小时、每个城市和关键字被查询的次数。然后输出每小时、每个城市被查询最多的前100个关键字。在输出表中，小时、城市、排名三者可以唯一确定一条记录，所以需要将这三列声明成联合主键（需要在外部存储中也有同样的主键设置）。
 
 ```language-sql
 CREATE TABLE rds_output (
-  rownum int,
-  start_time bigint,
-  city varchar,
-  keyword varchar,
-  pv bigint,
+  rownum BIGINT,
+  start_time BIGINT,
+  city VARCHAR,
+  keyword VARCHAR,
+  pv BIGINT,
   PRIMARY KEY (rownum, start_time, city)
-) with (
+) WITH (
   type = 'rds',
   ...
 )
@@ -57,23 +57,23 @@ FROM (
   SELECT *,
      ROW_NUMBER() OVER (PARTITION BY start_time, city ORDER BY pv desc) AS rownum
   FROM (
-        select substr(time_str,1,12) as start_time, 
+        SELECT SUBSTRING(time_str,1,12) AS start_time, 
             keyword,
-            count(1) as pv,
+            count(1) AS pv,
             city
-        from tmp_search
-        group by substr(time_str,1,12), keyword, city
+        FROM tmp_search
+        GROUP BY SUBSTRING(time_str,1,12), keyword, city
     ) a 
 ) 
 WHERE rownum <= 100
 
 ```
 
-## 示例二 {#section_y11_zdt_cgb .section}
+## 示例2 {#section_y11_zdt_cgb .section}
 
 -   测试数据
 
-    |ip（varchar）|time（varchar）|
+    |ip（VARCHAR）|time（VARCHAR）|
     |-----------|-------------|
     |`192.168.1.1`|100000000|
     |`192.168.1.2`|100000000|
@@ -85,10 +85,10 @@ WHERE rownum <= 100
 -   测试语句
 
     ```language-SQL
-    create table source_table (
+    CREATE TABLE source_table (
       IP VARCHAR,
       `TIME` VARCHAR 
-    )with(
+    )WITH(
       type='datahub',
       endPoint='xxxxxxx',
       project='xxxxxxx',
@@ -97,13 +97,13 @@ WHERE rownum <= 100
       accessKey='xxxxxxx'
     );
     
-    create table result_table (
-      rownum int,
+    CREATE TABLE result_table (
+      rownum BIGINT,
       start_time VARCHAR,
       IP VARCHAR,
       cc BIGINT,
       PRIMARY KEY (start_time, IP)
-    ) with (
+    ) WITH (
       type = 'rds',
       url='xxxxxxx',
       tableName='blink_rds_test',
@@ -114,7 +114,7 @@ WHERE rownum <= 100
     SELECT rownum,start_time,IP,cc
     FROM (
       SELECT *,
-         ROW_NUMBER() OVER (PARTITION BY start_time ORDER BY cc desc) AS rownum
+         ROW_NUMBER() OVER (PARTITION BY start_time ORDER BY cc DESC) AS rownum
       FROM (
             SELECT SUBSTRING(`TIME`,1,2) AS start_time,--可以根据真实时间取相应的数值，这里取得是测试数据
             COUNT(IP) AS cc,
@@ -131,8 +131,8 @@ WHERE rownum <= 100
 
 -   测试结果
 
-    |rownum（int）|start\_time（varchar）|ip（varchar）|cc（bigint）|
-    |-----------|--------------------|-----------|----------|
+    |rownum（BIGINT）|start\_time（VARCHAR）|ip（VARCHAR）|cc（BIGINT）|
+    |--------------|--------------------|-----------|----------|
     |1|10|`192.168.1.3`|6|
     |2|10|`192.168.1.2`|4|
     |3|10|`192.168.1.1`|2|
@@ -177,7 +177,7 @@ WHERE rownum <= 100
         --从SLS读取数据原始存储表
         CREATE TABLE sls_cdnlog_stream (
         vid VARCHAR, -- video id
-        rowtime Timestamp, -- 观看视频发生的时间
+        rowtime TIMESTAMP, -- 观看视频发生的时间
         response_size BIGINT, -- 观看产生的流量
         WATERMARK FOR rowtime as withOffset(rowtime, 0)
         ) WITH (
@@ -198,18 +198,18 @@ WHERE rownum <= 100
         vid VARCHAR,
         rss BIGINT,
         start_time VARCHAR,
-           -- 注意结果表中不存储 rownum 字段
-           -- 特别注意该主键的定义，为 TopN 上游 group by keys
+           -- 注意结果表中不存储rownum字段
+           -- 特别注意该主键的定义，为TopN上游GROUP BY的keys
         PRIMARY KEY(start_time, vid)
         ) WITH (
         type='RDS',
         ...
         );
         
-        -- 统计每分钟 top5 消耗流量的 vid，并输出
+        -- 统计每分钟Top5消耗流量的vid，并输出
         INSERT INTO hbase_out_cdnvidtoplog
         
-        -- 注意次外层查询，不选出 rownum 字段
+        -- 注意次外层查询，不选出rownum字段
         SELECT vid, rss, start_time FROM
         (
         SELECT
