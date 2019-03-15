@@ -120,12 +120,12 @@ DataHub和实时计算字段类型对应关系如下，建议使用该对应关�
 
 |DataHub字段类型|实时计算字段类型|
 |-----------|--------|
-|BIGINT|BIGINT|
-|STRING|VARCHAR|
-|DOUBLE|DOUBLE|
-|TIMESTAMP|BIGINT|
-|BOOLEAN|BOOLEAN|
-|DECIMAL|DECIMAL|
+|bigint|bigint|
+|string|varchar|
+|double|double|
+|timestamp|bigint|
+|boolean|boolean|
+|decimal|decimal|
 
 **说明：** DataHub的TIMESTAMP是精确到微妙级别的，在Unix时间戳里是16位的。而实时计算定义的TIMESTAMP是精确到毫秒级别的，在Unix时间戳里是13位的所以建议大家使用BIGINT来映射。如果一定是要用TIMESTAMP建议使用[计算列](cn.zh-CN/使用指南/Flink SQL/DDL语句/创建数据源表/数据源表概述.md#section_zxh_jhy_bgb)来做转换。
 
