@@ -10,6 +10,30 @@
 CREATE TABLE stream_test_hotline_agent (
 id INTEGER,
 len BIGINT,
+content VARCHAR
+) WITH (
+type='mq',
+endpoint='xxxxxx',
+accessID='xxxxxx',
+accessKey='xxxxxx',
+topic='xxxxxx',
+producerGroup='xxxxxx',
+tag='xxxxxx',
+encoding='utf-8',
+fieldDelimiter=',',
+retryTimes='5',
+sleepTimeMs='500'
+);
+
+```
+
+## CSV类格式 {#section_tvd_lqg_chb .section}
+
+```language-sql
+
+CREATE TABLE stream_test_hotline_agent (
+id INTEGER,
+len BIGINT,
 content varchar
 ) WITH (
 type='mq',
@@ -26,6 +50,43 @@ sleepTimeMs='500'
 );
 
 ```
+
+## 二进制格式 {#section_xw5_5qg_chb .section}
+
+二进制格式测试代码如下。
+
+```language-sql
+
+create table source_table (
+  commodity VARCHAR
+)with(
+  type='random'
+);
+
+
+create table result_table (
+  mess varbinary
+) with (
+  type = 'mq',
+  topic = 'xxx',
+  endpoint = 'xxx',
+  accessId='xxx',
+  accessKey='xxx',
+  producerGroup='xxx'
+);
+
+
+INSERT INTO result_table
+SELECT 
+cast(substring(commodity,0,5) as varbinary) as mess   
+FROM source_table
+
+```
+
+**说明：** 
+
+-   `cast(varchar as varbinary)`需在实时计算2.0及以上版本使用，若版本低于2.0，请先升级。
+-   varbinary只能入参一次。
 
 ## WITH参数 {#section_glb_mqf_cgb .section}
 
