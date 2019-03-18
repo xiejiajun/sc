@@ -91,7 +91,7 @@ create table sls_stream(
 
 -   测试结果
 
-    |name\(VARCHAT\)|MsgID\(VARCHAT\)|Version\(VARCHAT\)|
+    |name\(VARCAHR\)|MsgID\(VARCAHR\)|Version\(VARCAHR\)|
     |---------------|----------------|------------------|
     |ens\_altar\_flow|ems0a|0.0.1|
 
