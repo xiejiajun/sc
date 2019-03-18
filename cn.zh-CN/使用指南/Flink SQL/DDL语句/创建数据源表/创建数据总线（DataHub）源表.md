@@ -1,27 +1,27 @@
 # 创建数据总线（DataHub）源表 {#concept_62522_zh .concept}
 
-本文为您介绍如何为实时计算创建数据总线（DataHub）源表以及创建过程涉及到的属性字段、WITH参数和类型映射。
+本文为您介绍如何为实时计算创建数据总线（DataHub）源表以及创建过程涉及到的属性字段、with参数和类型映射。
 
 ## 什么是数据总线 {#section_ptb_bvy_bgb .section}
 
-DataHub作为一个流式数据总线，为阿里云数加平台提供了大数据的入口服务，共同构建一站式的数据处理平台。实时计算通常使用DataHub作为流式数据存储头和输出目的端。同时，上游众多流式数据，包括DTS、IoT等均选择DataHub作为大数据平台的数据入口。 DataHub本身是流数据存储，实时计算只能将其作为流式数据输入。
+DataHub作为流式数据总线，为阿里云数加平台提供了大数据的入口服务。实时计算可以使用DataHub作为流式数据存储的源头和输出的目的端。
 
 ## 示例 {#section_adm_zym_cgb .section}
 
-DataHub可以作为实时计算的数据输入，示例如下:
+DataHub可以作为实时计算的数据输入，示例如下。
 
 ```language-sql
-create table datahub_stream(
-  name varchar,
+CREATE TABLE datahub_stream(
+  name VARCHAR,
   age BIGINT,
   birthday BIGINT
-) with (
+) WITH (
   type='datahub',
-  endPoint='xxxxxxxxx',
-  project='xxxxxxxxxx',
-  topic='xxxxxxx',
-  accessId='xXXXXXXXX',
-  accessKey='XXXXXXXXX',
+  endPoint='xxxxxx',
+  project='xxxxxx',
+  topic='xxxxxx',
+  accessId='xxxxxx',
+  accessKey='xxxxxx',
   startTime='2017-07-21 00:00:00'
 ); 
 
@@ -29,25 +29,23 @@ create table datahub_stream(
 
 ## 属性字段 {#section_yyk_rwy_bgb .section}
 
-Flink SQL支持获取DataHub的属性字段。能够记录每条信息写入DataHub的系统时间。
+Flink SQL支持获取DataHub的属性字段。通过读取属性字段可以获得每条信息写入DataHub的系统时间（System Time），如下图所示。
 
-如图所示：
-
-![12421](http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/pic/62522/cn_zh/1522727303925/1122.png)
+![System Time](http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/pic/62522/cn_zh/1522727303925/1122.png)
 
 |字段名|注释说明|
 |---|----|
-|timestamp|每条记录入datahub的systemtime|
+|timestamp|每条记录写入DataHub的系统时间（System Time）|
 
 **属性字段使用说明**
 
 为了获取这些属性字段，除了按照正常逻辑声明外，还需要在类型声明后面加上`HEADER`关键字以示区分。
 
-例如，属性字段并不存在于DataHub的字段声明里。想获取每条记录入DataHub的`systemtime`，可以将`timestamp`作为字段名，在后面加上`HEADER`就可以取出想要的属性值。示例如下：
+例如，DataHub属性字段`timestamp`并不存在于DataHub的字段声明。想获取每条记录入DataHub的系统时间，可以将`timestamp`作为字段名，在后面加上`HEADER`。示例如下。
 
 -   测试数据
 
-    |name\(VARCHAT\)|MsgID\(VARCHAT\)|
+    |name\(VARCHAR\)|MsgID\(VARCHAR\)|
     |---------------|----------------|
     |ens\_altar\_flow|ems0a|
 
@@ -55,9 +53,9 @@ Flink SQL支持获取DataHub的属性字段。能够记录每条信息写入Data
 
     ```language-sql
     CREATE TABLE datahub_log (
-      `timestamp`  varchar HEADER,
-      name       varchar，
-      MsgID        varchar
+      `timestamp`  VARCHAR HEADER,
+      name     VARCAHR，
+      MsgID    VARCAHR
     )
     WITH
     (
@@ -66,9 +64,9 @@ Flink SQL支持获取DataHub的属性字段。能够记录每条信息写入Data
     );
     
     CREATE TABLE RDS_out (
-      `timestamp`     varchar,
-      MsgID    varchar,
-      name  varchar 
+      `timestamp`     VARCAHR,
+      MsgID    VARCAHR,
+      name  VARCAHR
     )
     WITH
     (
@@ -87,7 +85,7 @@ Flink SQL支持获取DataHub的属性字段。能够记录每条信息写入Data
 
 -   测试结果
 
-    |TIME\(VARCHAT\)|MsgID\(VARCHAT\)|name\(VARCHAT\)|
+    |TIME\(VARCHAR\)|MsgID\(VARCHAR\)|name\(VARCHAR\)|
     |---------------|----------------|---------------|
     |1522652455625|ems0a|ens\_altar\_flow|
 
