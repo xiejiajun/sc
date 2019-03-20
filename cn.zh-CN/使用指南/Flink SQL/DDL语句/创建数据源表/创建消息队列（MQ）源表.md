@@ -4,7 +4,7 @@
 
 ## 什么是消息队列MQ {#section_ezv_dkz_bgb .section}
 
-消息队列（Message Queue），简称MQ，是阿里云商用的专业消息中间件，是企业级互联网架构的核心产品。基于高可用分布式集群技术，搭建了包括发布订阅、消息轨迹、资源统计、定时（延时）、监控报警等一套完整的消息云服务，实现分布式计算场景中所有异步解耦功能。实时计算可以将消息队列作为流式数据输入，如下:
+消息队列（Message Queue），简称MQ，是阿里云专业消息中间件，是企业级互联网架构的核心产品。实时计算可以将消息队列作为流式数据输入，示例如下。
 
 ## 示例 {#section_h3x_mkz_bgb .section}
 
@@ -15,14 +15,14 @@ create table metaq_stream(
  z varchar
 ) with (
  type='mq',
- topic='xxxxxxx',
- endpoint='xxxxxxx',
- pullIntervalMs='xxxxxxx',
- accessId='xxxxxxx',
- accessKey='xxxxxxx',
- startMessageOffset='xxxxxxx',
- consumerGroup='xxxxxxx',
- fieldDelimiter='xxxxxxx'
+ topic='******',
+ endpoint='******',
+ pullIntervalMs='******',
+ accessId='******',
+ accessKey='******',
+ startMessageOffset='******',
+ consumerGroup='******',
+ fieldDelimiter='******'
 );
 
 
@@ -39,7 +39,7 @@ create table metaq_stream(
 2,name,female
 ```
 
-**说明：** 1条MQ消息可以包括0条到多条数据记录，记录与记录之间使用`\n`分隔。
+**说明：** 1条MQ消息可以包括0条到多条数据记录，记录之间使用`\n`分隔。
 
 在实时计算作业中，声明MQ数据源表的DDL如下。
 
@@ -50,14 +50,14 @@ create table metaq_stream(
  gender varchar
 ) with (
  type='mq',
- topic='xxxxxxx',
- endpoint='xxxxxxx',
- pullIntervalMs='xxxxxxx',
- accessId='xxxxxxx',
- accessKey='xxxxxxx',
- startMessageOffset='xxxxxxx',
- consumerGroup='xxxxxxx',
- fieldDelimiter='xxxxxxx'
+ topic='******',
+ endpoint='******',
+ pullIntervalMs='******',
+ accessId='******',
+ accessKey='******',
+ startMessageOffset='******',
+ consumerGroup='******',
+ fieldDelimiter='******'
 );
 
 
@@ -73,12 +73,12 @@ create table source_table (
   mess varbinary
 ) with (
   type = 'mq',
-  endpoint = 'xxx',
+  endpoint = '******',
   pullIntervalMs='500',
-  accessId='xxx',
-  accessKey='xxx',
-  topic = 'xxx',
-  consumerGroup='xxx'
+  accessId='******',
+  accessKey='******',
+  topic = '******',
+  consumerGroup='******'
 );
 
 create table out_table (
@@ -97,7 +97,7 @@ FROM source_table
 **说明：** 
 
 -   `cast(mess as varbinary)`需在实时计算2.0及以上版本使用，若版本低于2.0，请先升级。
--   varbinary只能入参一次。
+-   VARBINARY只能入参一次。
 
 ## WITH参数 {#section_nnh_4kz_bgb .section}
 
@@ -113,21 +113,21 @@ FROM source_table
 |consumerGroup|订阅消费group名称|无|
 |pullIntervalMs|拉取时间间隔|单位为毫秒|
 |startTime|消息消费启动的时间点|可选|
-|startMessageOffset|消息开始的偏移量如果填了优先以startMessageoffset的位点开始加载|可选，如果填写，将优先以startMessageoffset的位点开始加载。|
+|startMessageOffset|消息开始的偏移量|可选，如果填写，将优先以startMessageoffset的位点开始加载。|
 |tag|订阅的标签|可选|
 |lineDelimiter|解析block时行分隔符|可选，默认为 `\n`|
 |fieldDelimiter|字段分隔符|可选，默认为`\u0001`表示`Crtl+A`和 `\001`|
 |encoding|编码格式|可选，默认为 `utf-8`|
-|lengthCheck|单行字段条数检查策略|可选，默认为SKIP,其它可选值为EXCEPTION、PAD。-   SKIP：字段数目不符合时跳过 。
--   EXCEPTION:字段数目不符合时抛出异常。
--   PAD:按顺序填充，不存在的置为null。
+|lengthCheck|单行字段条数检查策略|可选，默认为SKIP，其它可选值为EXCEPTION和PAD。-   SKIP：字段数目不符合时跳过 。
+-   EXCEPTION：字段数目不符合时抛出异常。
+-   PAD：按顺序填充，不存在的置为null。
 
 |
 |columnErrorDebug|是否打开调试开关|可选，默认为false。如果设置为ture，则打印解析异常的log。|
 
 ## 类型映射 {#section_hkx_4kz_bgb .section}
 
-|MQ字段类型|建议实时计算字段类型|
-|------|----------|
+|MQ字段类型|实时计算字段类型|
+|------|--------|
 |STRING|VARCHAR|
 
