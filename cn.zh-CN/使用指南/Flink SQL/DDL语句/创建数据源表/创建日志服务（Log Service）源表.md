@@ -4,7 +4,7 @@
 
 ## 什么是日志服务 {#section_qr1_2wy_bgb .section}
 
-日志服务（Log Service），简称LOG，原SLS。是针对实时数据的一站式服务，在阿里巴巴集团经历大量大数据场景锤炼而成。无需开发就能快捷完成数据采集、消费、投递以及查询分析等功能，帮助提升运维、运营效率，建立DT时代海量日志处理能力。 日志服务本身是流数据存储，实时计算能将其作为流式数据输入。对于日志服务而言，数据格式类似JSON，示例如下。
+日志服务（Log Service）是针对日志类数据的一站式服务，在阿里巴巴集团经历大量大数据场景锤炼而成。 日志服务本身是流数据存储，实时计算能将其作为流式数据输入。对于日志服务而言，数据格式类似JSON，示例如下。
 
 ```language-json
 {
@@ -15,29 +15,29 @@
 
 ```
 
-对于实时计算而言，我们需要定义的DDL如下\(sls即Log Service\)。
+对于实时计算而言，我们需要定义的DDL如下（代码中的sls代表Log Service）。
 
 ```language-sql
 create table sls_stream(
   a int,
   b int,
-  c varchar
+  c VARCHAR
 ) with (
-  type ='sls',
-  endPoint ='xxxxxx',
-  accessId ='xxxxxx',
-  accessKey ='xxxxxx',
-  startTime = 'xxxxxx',
-  project ='xxxxxx',
-  logStore ='xxxxxx',
-  consumerGroup ='xxxxxx'
+  type ='sls',  
+  endPoint ='******',
+  accessId ='******',
+  accessKey ='******',
+  startTime = '******',
+  project ='******',
+  logStore ='******',
+  consumerGroup ='******'
 );
 
 ```
 
 ## 属性字段 {#section_xhx_xxy_bgb .section}
 
-目前默认支持三个属性字段的获取，也支持其他自定义写入的字段。
+目前Flink SQL默认支持3个Log Servic属性字段的获取，也支持其它自定义字段的写入。
 
 |字段名|注释说明|
 |---|----|
@@ -47,7 +47,7 @@ create table sls_stream(
 
 属性字段使用说明
 
-为了获取这些属性字段，除了按照正常逻辑声明外，还需要在类型声明后面加上`HEADER`关键字以示区分。示例如下：
+为了获取这些属性字段，除了正常逻辑声明外，还需要在类型声明后加上`HEADER`关键字。示例如下。
 
 -   测试数据
 
@@ -61,8 +61,8 @@ create table sls_stream(
 
     ```language-sql
     CREATE TABLE sls_log (
-      __topic__  varchar HEADER,
-      result     varchar  
+      __topic__  VARCHAR HEADER,
+      result     VARCHAR  
     )
     WITH
     (
@@ -70,9 +70,9 @@ create table sls_stream(
     );
     
     CREATE TABLE sls_out (
-      name     varchar,
-      MsgID    varchar,
-      Version  varchar 
+      name     VARCHAR,
+      MsgID    VARCHAR,
+      Version  VARCHAR 
     )
     WITH
     (
@@ -104,8 +104,8 @@ create table sls_stream(
 |accessId|sls读取的accessKey|无|
 |accessKey|sls读取的密钥|无|
 |project|读取的sls项目|无|
-|logStore|project下的具体的logStore|无|
-|consumerGroup|消费组名|用户可以自定义消费组名\(没有固定格式\)|
+|logStore|project下的具体的LogStore名称|无|
+|consumerGroup|消费组名|用户可以自定义消费组名（没有固定格式）|
 |startTime|消费日志开始的时间点|无|
 |heartBeatIntervalMills|可选，消费客户端心跳间隔时间|默认为10s|
 |maxRetryTimes|读取最大尝试次数|可选，默认为5。|
@@ -119,9 +119,9 @@ create table sls_stream(
 
 **说明：** 
 
--   SLS暂不支持MAP类型的数据。
+-   sls暂不支持MAP类型的数据。
 -   字段顺序支持无序（建议字段顺序和表中定义一致）。
--   输入数据源为JSON形式时，注意定义分隔符，并且需要采用内置函数分析JSON\_VALUE,否则就会解析失败。报错如下:
+-   输入数据源为JSON形式时，注意定义分隔符，并且需要采用内置函数[JSON\_VALUE](cn.zh-CN/使用指南/Flink SQL/内置函数/字符串函数/JSON_VALUE.md#)分析，否则就会解析失败。报错如下:
 
     ```
     2017-12-25 15:24:43,467 WARN [Topology-0 (1/1)] com.alibaba.blink.streaming.connectors.common.source.parse.DefaultSourceCollector - Field missing error, table column number: 3, data column number: 3, data filed number: 1, data: [{"lg_order_code":"LP00000005","activity_code":"TEST_CODE1","occur_time":"2017-12-10 00:00:01"}]
@@ -129,11 +129,11 @@ create table sls_stream(
     ```
 
 -   batchGetSize设置不能超过1000，否则会报错。
--   batchGetSize指明的是logGroup获取的数量，如果单条logItem的大小和 batchGetSize都很大，很有可能会导致频繁的GC，这种情况下该参数应调小。
+-   batchGetSize指明的是logGroup获取的数量，如果单条logItem的大小和batchGetSize都很大，有可能会导致频繁的垃圾回收（Garbage Collection\)，这种情况下该参数应调小。
 
 ## 类型映射 {#section_zgx_zxy_bgb .section}
 
-日志服务和实时计算字段类型对应关系，建议您使用该对应关系进行DDL声明:
+日志服务和实时计算字段类型对应关系如下。建议您使用该对应关系进行DDL声明:
 
 |日志服务字段类型|实时计算字段类型|
 |--------|--------|
