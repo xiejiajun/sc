@@ -33,6 +33,12 @@ create table odps_output(
 |accessId|accessId|必选|
 |accessKey|accessKey|必选|
 |partition|分区名|可选，分区表必填，具体分区信息到[数据地图](https://meta.dw.alibaba-inc.com/store/index.html)查看。例如: 一个表的分区信息为`ds=20180905`，则可以写 ``partition` = 'ds=20180905'`。多级分区之间用逗号分隔，示例: ``partition` = 'ds=20180912,dt=xxxyyy'`|
+|isOverwrite|写入sink之前会把结果表或者结果表的数据清空。| -   blink-3.2以下版本默认参数值为true。
+-   blink-3.2版本默认参数值为false。
+
+ **说明：** isOverwrite参数不支持版本内修改。如果需要修改，请升级或回滚blink版本。
+
+ |
 
 **说明：** 
 
