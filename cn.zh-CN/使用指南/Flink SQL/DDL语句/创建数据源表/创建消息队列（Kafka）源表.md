@@ -6,30 +6,30 @@
 
 ## 什么是Kafka源表 {#section_mqr_zmz_bgb .section}
 
-Kafka源表的实现迁移自社区的kafka版本实现。Kafka源表数据解析流程：Kafka Source Table -\> UDTF -\>Realtime Compute -\> SINK。从Kakfa读入的数据，都是VARBINARY（二进制）格式，对读入的每条数据，都需要用UDTF将其解析成格式化数据。
+Kafka源表的实现迁移自社区的kafka版本实现。Kafka源表数据解析流程：Kafka Source Table -\> UDTF -\>Realtime Compute -\> Sink。从Kakfa读入的数据，都是VARBINARY（二进制）格式，对读入的每条数据，都需要用[UDTF](cn.zh-CN/使用指南/Flink SQL/自定义函数（UDX）/自定义表值函数（UDTF）.md#)将其解析成格式化数据。
 
 ## DDL定义 {#section_zyh_dnz_bgb .section}
 
-Kafka源表定义DDL必须与以下SQL一摸一样，表中的五个字段顺序务必保持一致：
+Kafka源表定义DDL部分必须与以下SQL完全一致，with参数中设置可改。
 
 ```language-sql
--- 定义源表，注意：kafka源表DDL字段必须与以下例子一模一样。WITH中参数可改。
-create table kafka_stream(
+
+create table kafka_stream(   ---表中的5个字段顺序务必保持一致
   messageKey VARBINARY,
   `message`    VARBINARY,
   topic      VARCHAR,
   `partition`  INT,
-  `offset`     BIGINT
+  `offset`     BIGINT        
 ) with (
   type ='kafka010',
-  topic = 'xxx',
-  `group.id` = 'xxxxxx',
+  topic = '******',
+  `group.id` = '******',
   ...
 );
 
 ```
 
-## WITH参数 {#section_ivk_14z_bgb .section}
+## With参数 {#section_ivk_14z_bgb .section}
 
 -   通用配置
 
@@ -39,52 +39,84 @@ create table kafka_stream(
     |topic|读取的单个topic|无|
     |topicPattern|读取一批topic的表达式|无|
     |startupMode|启动位点|     -   EARLISET：从kafka最早分区开始读取。
-    -   Group\_OFFSETS: 根据Group读取。
-    -   LATEST: 从kafka最新位点开始读取。
-    -   TIMESTAMP:从指定的时间点读取。\(Kafka010、Kafka011支持。\)
+    -   Group\_OFFSETS：根据Group读取。
+    -   LATEST：从kafka最新位点开始读取。
+    -   TIMESTAMP：从指定的时间点读取。\(Kafka010、Kafka011支持。\)
  |
-    |partitionDiscoveryIntervalMS|定时检查是否有新分区产生|默认值为60000,即1分钟。|
+    |partitionDiscoveryIntervalMS|定时检查是否有新分区产生|默认值为60000，单位为毫秒。|
     |extraConfig|额外的kafkaConsumer配置项目|可选，未在可选配置项中，但是额外期望的配置。|
 
--   kafka08必选配置
+-   kafka08配置
+    -   kafka08必选配置
 
-    |参数|注释说明|备注|
-    |--|----|--|
-    |group.id|组名|消费组id|
-    |zookeeper.connect|zk链接地址|zk连接id|
+        |参数|注释说明|备注|
+        |--|----|--|
+        |group.id|组名|消费组id|
+        |zookeeper.connect|zk链接地址|zk连接id|
 
--   可选配置key `"consumer.id","socket.timeout.ms","fetch.message.max.bytes","num.consumer.fetchers","auto.commit.enable","auto.commit.interval.ms","queued.max.message.chunks", "rebalance.max.retries","fetch.min.bytes","fetch.wait.max.ms","rebalance.backoff.ms","refresh.leader.backoff.ms","auto.offset.reset","consumer.timeout.ms","exclude.internal.topics","partition.assignment.strategy","client.id","zookeeper.session.timeout.ms","zookeeper.connection.timeout.ms","zookeeper.sync.time.ms","offsets.storage","offsets.channel.backoff.ms","offsets.channel.socket.timeout.ms","offsets.commit.max.retries","dual.commit.enabled","partition.assignment.strategy","socket.receive.buffer.bytes","fetch.min.bytes"` 
--   kafka09/kafka010/kafka011必选配置
+    -   可选配置Key
+        -   consumer.id
+        -   socket.timeout.ms
+        -   fetch.message.max.bytes
+        -   num.consumer.fetchers
+        -   auto.commit.enable
+        -   auto.commit.interval.ms
+        -   queued.max.message.chunks
+        -   rebalance.max.retries
+        -   fetch.min.bytes
+        -   fetch.wait.max.ms
+        -   rebalance.backoff.ms
+        -   refresh.leader.backoff.ms
+        -   auto.offset.reset
+        -   consumer.timeout.ms
+        -   exclude.internal.topics
+        -   partition.assignment.strategy
+        -   client.id
+        -   zookeeper.session.timeout.ms
+        -   zookeeper.connection.timeout.ms
+        -   zookeeper.sync.time.ms
+        -   offsets.storage
+        -   offsets.channel.backoff.ms
+        -   offsets.channel.socket.timeout.ms
+        -   offsets.commit.max.retries
+        -   dual.commit.enabled
+        -   partition.assignment.strategy
+        -   socket.receive.buffer.bytes
+        -   fetch.min.bytes
+-   kafka09/kafka010/kafka011配置
+    -   kafka09/kafka010/kafka011必选配置
 
-    |参数|注释说明|备注|
-    |--|----|--|
-    |group.id|组名|消费组id|
-    |bootstrap.servers|Kafka集群地址|Kafka集群地址|
+        |参数|注释说明|备注|
+        |--|----|--|
+        |group.id|组名|消费组ID|
+        |bootstrap.servers|Kafka集群地址|Kafka集群地址|
 
-    其它可选配置项参考Kafka官方文档进行配置
+    -   kafka09/kafka010/kafka011可选配置
 
-    -    [Kafka09](https://kafka.apache.org/0110/documentation.html#consumerconfigs) 
-    -   [Kafka010](https://kafka.apache.org/090/documentation.html#newconsumerconfigs) 
-    -   [Kafka011](https://kafka.apache.org/0102/documentation.html#newconsumerconfigs) 
-    当需要配置某选项时，在DDL中的with部分增加对应的参数即可，例如配置SASL登录增加如下三个参数:
+        请参见如下Kafka官方文档进行配置。
 
-    ```
-    create table kafka_stream(
-      messageKey varbinary,
-      `message` varbinary,
-      topic varchar,
-      `partition`int,
-      `offset`bigint
-    ) with (
-      type ='kafka010',
-      topic = 'xxx',
-      `group.id` = 'xxxxxx',
-      ...,
-      `security.protocol`=SASL_PLAINTEXT,
-      `sasl.mechanism`=PLAIN,
-      `sasl.jaas.config`='org.apache.kafka.common.security.plain.PlainLoginModule required username="USERNAME" password="PASSWORD";'--其中USERNAME和PASSWORD填写真实的用户名和密码
-    );
-    ```
+        -    [Kafka09](https://kafka.apache.org/0110/documentation.html#consumerconfigs) 
+        -   [Kafka010](https://kafka.apache.org/090/documentation.html#newconsumerconfigs) 
+        -   [Kafka011](https://kafka.apache.org/0102/documentation.html#newconsumerconfigs) 
+        当需要配置某选项时，在DDL中的with部分增加对应的参数即可。例如，配置SASL登录，需增加3个参数``security.protocol``，``security.protocol``和``sasl.jaas.config``，示例如下。
+
+        ```
+        create table kafka_stream(
+          messageKey varbinary,
+          `message` varbinary,
+          topic varchar,
+          `partition` int,
+          `offset` bigint
+        ) with (
+          type ='kafka010',
+          topic = '******',
+          `group.id` = '*******',
+          ...,
+          `security.protocol`=SASL_PLAINTEXT,
+          `sasl.mechanism`=PLAIN,
+          `sasl.jaas.config`='org.apache.kafka.common.security.plain.PlainLoginModule required username="USERNAME" password="PASSWORD";'--其中USERNAME和PASSWORD填写真实的用户名和密码
+        );
+        ```
 
 
 ## Kafka版本对应关系 {#section_o4c_b4z_bgb .section}
@@ -98,10 +130,8 @@ create table kafka_stream(
 
 ## Kafka消息解析示例 {#section_ycd_g4z_bgb .section}
 
--   示例一
-    -   场景
-
-        要将Kafka中的数据进行计算，并将计算结果输出到RDS。 Kafka中保存了JSON格式数据，需要用Realtime Compute进行计算，消息格式为：
+-   示例1
+    -   场景 要将Kafka中的数据进行计算，并将计算结果输出到RDS。 Kafka中保存了JSON格式数据，需要用Realtime Compute进行计算，消息格式为：
 
         ```language-json
         {
@@ -112,17 +142,17 @@ create table kafka_stream(
         
         ```
 
-        整个计算流程为：Kafka SOURCE-\>UDTF-\>Realtime Compute-\>RDS SINK
+        整个计算流程为：Kafka Source-\>UDTF-\>Realtime Compute-\>RDS Sink
 
     -   示例代码
         -   SQL
 
             ```language-sql
             -- 定义解析Kakfa message的UDTF
-            CREATE FUNCTION kafkapaser AS 'com.alibaba.kafkaUDTF';
+            CREATE FUNCTION kafkaparser AS 'com.alibaba.kafkaUDTF';
             
             -- 定义源表，注意：kafka源表DDL字段必须与以下例子一模一样。WITH中参数可改。
-            create table kafka_src (
+            CREATE TABLE kafka_src (
                 messageKey  VARBINARY,
                 `message`   VARBINARY,
                 topic       VARCHAR,
@@ -134,7 +164,7 @@ create table kafka_stream(
                 `group.id` = 'test_kafka_consumer_group',
                 bootstrap.servers = 'ip1:port1,ip2:port2,ip3:port3'
             );
-            create table rds_sink (
+            CREATE TABLE rds_sink (
               name       VARCHAR,
               age        INT,
               grade      VARCHAR,
@@ -144,7 +174,7 @@ create table kafka_stream(
              url='jdbc:mysql://localhost:3306/test',
              tableName='test4',
              userName='test',
-             password='XXXXXX'
+             password='*******'
             );
             
             -- 使用UDTF，将二进制数据解析成格式化数据
@@ -159,9 +189,9 @@ create table kafka_stream(
                 T.age,
                 T.grade,
                 T.updateTime
-            from
+            FROM
                 kafka_src as S,
-                LATERAL TABLE (kafkapaser (`message`)) as T (
+                LATERAL TABLE (kafkaparser (`message`)) as T (
                     name,
                     age,
                     grade,
@@ -169,13 +199,13 @@ create table kafka_stream(
                 );
             
             -- 使用解析出的格式化数据进行计算，并将结果输出到RDS中
-            insert into rds_sink
+            INSERT INTO rds_sink
               SELECT 
                   name,
                   age,
                   grade,
                   updateTime
-              from input_view;
+              FROM input_view;
             
             ```
 
@@ -269,12 +299,12 @@ create table kafka_stream(
             
             ```
 
--   示例二
+-   示例2
     -   场景
 
-        从kafka读出的数据，需要进行窗口计算。 按照实时计算目前的设计，滚窗/滑窗等窗口操作，需要（且必须）在源表DDL上定义Watermark。Kafka源表比较特殊。如果要以kafka中message字段中的的Event Time进行窗口操作，需要先从message字段，使用UDX解析出event time，才能定义watermark。 在kafka源表场景中，需要使用计算列。 假设，kafka中写入的数据如下：
+        从Kafka读出的数据，需要进行窗口计算。 按照实时计算目前的设计，滚窗/滑窗等窗口操作，需要（且必须）在源表DDL上定义[Watermark](cn.zh-CN/使用指南/Flink SQL/基本概念/Watermark.md#)。Kafka源表比较特殊。如果要以Kafka中message字段中的的Event Time进行窗口操作，需要先从message字段，使用UDX解析出Event Time，才能定义Watermark。 在Kafka源表场景中，需要使用[计算列](cn.zh-CN/使用指南/Flink SQL/基本概念/计算列.md#)。 假设，Kafka中写入的数据如下：
 
-         `2018-11-11 00:00:00|1|Anna|female` 整个计算流程为：Kafka SOURCE-\>UDTF-\>Realtime Compute-\>RDS SINK。
+         `2018-11-11 00:00:00|1|Anna|female` 。计算流程为：Kafka Source-\>UDTF-\>Realtime Compute-\>RDS Sink。
 
     -   示例代码
         -   SQL
@@ -284,14 +314,14 @@ create table kafka_stream(
             CREATE FUNCTION kafkapaser AS 'com.alibaba.kafkaUDTF';
             CREATE FUNCTION kafkaUDF AS 'com.alibaba.kafkaUDF';
             
-            -- 定义源表，注意：afka源表DDL字段必须与以下例子一模一样。WITH中参数可改。
+            -- 定义源表，注意：Kfka源表DDL字段必须与以下例子一模一样。WITH中参数可改。
             create table kafka_src (
                 messageKey  VARBINARY,
                 `message`   VARBINARY,
                 topic       VARCHAR,
                 `partition` INT,
                 `offset`    BIGINT,
-                ctime AS TO_TIMESTAMP(kafkaUDF(`message`)), -- 定义计算列，计算列可理解为占位符，源表中并没有这一列，其中的数据可经过下游计算得出。注意计算列的类型必须为timestamp才能在做watermark。
+                ctime AS TO_TIMESTAMP(kafkaUDF(`message`)), -- 定义计算列，计算列可理解为占位符，源表中并没有这一列，其中的数据可经过下游计算得出。注意:计算列的类型必须为TIMESTAMP才能在做watermark。
                 watermark for `ctime` as withoffset(`ctime`,0) -- 在计算列上定义watermark
             ) WITH (
                 type = 'kafka010',    -- Kafka Source类型，与Kafka版本强相关，目前支持的Kafka版本请参考本文档
@@ -310,7 +340,7 @@ create table kafka_stream(
              url='jdbc:mysql://localhost:3306/test',
              tableName='test4',
              userName='test',
-             password='XXXXXX'
+             password='******'
             );
             
             -- 使用UDTF，将二进制数据解析成格式化数据
@@ -508,10 +538,12 @@ create table kafka_stream(
     
     ```
 
--   WITH参数
+-   withWITH参数
 
-    关于自建Kafka的WITH参数，请参考本文档Kafka创建时DDL的WITH参数说明。需要注意的是`bootstrap.servers`参数需要填写自建的地址和端口号。
+    请参见文档开始部分[with参数说明](cn.zh-CN/使用指南/Flink SQL/DDL语句/创建数据源表/创建消息队列（Kafka）源表.md#section_ivk_14z_bgb)。
 
-    **说明：** 实时计算仅在2.2.6及以上版本中，支持阿里云Kafka或自建Kafka的TPS、RPS等指标信息的显示。
+    **说明：** 
 
+    -   `bootstrap.servers`参数需要填写自建的地址和端口号。
+    -   实时计算仅在2.2.6及以上版本中，支持阿里云Kafka或自建Kafka的TPS、RPS等指标信息的显示。
 
