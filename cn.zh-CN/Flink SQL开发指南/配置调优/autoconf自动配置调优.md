@@ -2,6 +2,8 @@
 
 为了增加用户的体验度，实时计算团队开发了自动配置调优（autoconf）功能。
 
+**说明：** autoconf自动配置调优功能支持blink1.x和2.x版本。
+
 ## 背景及功能范围 {#section_g5m_wts_zfb .section}
 
 在您作业的各个算子和流作业上下游性能达标和稳定的前提下，自动配置调优功能可以帮助您更合理的分配各算子的资源和并发度等配置。 全局优化您的作业，调节作业吞吐量不足、作业全链路的反压等性能调优的问题。
@@ -19,7 +21,7 @@
     1.  上线作业
         1.  完成SQL开发，通过**语法检查**后，点击**上线**，即可出现如下**上线新版本**界面。
 
-            ![234](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333876_zh-CN.png)
+            ![234](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626733876_zh-CN.png)
 
         2.  点击智能CU配置。第一次不需要指定CU数直接使用系统默认配置。
             -   智能配置：指定使用CU autoconf算法会基于系统默认配置，生成CU数，进行优化资源配置。如果是第一次运行，算法会根据经验值生成一份初始配置。建议作业运行了5-10分钟以上，确认source rps等metrics稳定2-3分钟后，再使用智能配置，重复3到5次才能调优出最佳的配置。
@@ -28,17 +30,17 @@
 
         1.  使用默认配置启动作业，出现如下的界面。
 
-            ![21](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333877_zh-CN.png)
+            ![21](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626733877_zh-CN.png)
 
         2.  启动作业。
 
-            ![23](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333878_zh-CN.png)
+            ![23](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626733878_zh-CN.png)
 
         示例如下。第一次默认配置生成的资源配置为71个CU。
 
         **说明：** 请您确保作业已经运行10分钟以上，并且source rps等数据曲线稳定2-3分钟后，再使用智能CU配置。
 
-        ![43](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333879_zh-CN.png)
+        ![43](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626733879_zh-CN.png)
 
     3.  使用智能配置启动作业
         1.  资源调优
@@ -57,20 +59,20 @@
 
                 如果第一次调优不满足您的需求，可以调优多次。可以根据每次调优后Job的状态来增加或减少资源数。
 
-            ![754](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333880_zh-CN.png)
+            ![754](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626733880_zh-CN.png)
 
         2.  调优后的结果如下图。
 
-            ![65](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333881_zh-CN.png)
+            ![65](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626733881_zh-CN.png)
 
             **说明：** 如果是新任务，不要选择『使用上次资源配置』，否则会报错。
 
-            ![345](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333882_zh-CN.png)
+            ![345](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626833882_zh-CN.png)
 
 -   已存在作业
     -   调优流程示意图
 
-        ![2233](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333883_zh-CN.png)
+        ![2233](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626833883_zh-CN.png)
 
         **说明：** 
 
@@ -79,29 +81,29 @@
     -   调优流程
         1.  暂停任务。
 
-            ![312567](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333884_zh-CN.png)
+            ![312567](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626833884_zh-CN.png)
 
         2.  重复新作业的调优步骤，使用最新的配置启动作业。
 
-            ![523](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333885_zh-CN.png)
+            ![523](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626833885_zh-CN.png)
 
 
-## 常见问题 { .section}
+## 常见问题 {#section_plc_mn1_fhb .section}
 
 以下几点可能会影响自动调优的准确性。
 
 -   任务运行的时间较短，会造成采样得到的有用信息较少，会影响autoconf算法的效果。建议延长运行时间，确认source rps等数据曲线稳定2-3分钟后即可。
 -   任务运行有异常（failover），会影响结果的准确性。建议用户检查和修复failover的问题。
 -   任务的数据量比较少，会影响结果的准确性。建议回追足够多的历史数据。
--   影响的因素有很多，自动调优autoconf不能保证下一次生成的配置一定比上一次的好。如果还不能满足需求，用户参考[手动调优文档]()，进行手动调优。
+-   影响的因素有很多，自动调优autoconf不能保证下一次生成的配置一定比上一次的好。如果还不能满足需求，用户参考[手动配置调优](cn.zh-CN/Flink SQL开发指南/配置调优/手动配置调优.md#)，进行手动调优。
 
-## 调优建议 { .section}
+## 调优建议 {#section_yh4_mn1_fhb .section}
 
 -   每次触发智能配置前任务稳定运行超过10分钟。这样有利于autoconf准确搜集的任务运行时的指标信息。
--   autoconf可能需要3-5次迭代才能见效。即需要您重复以上的『上线』和『运维』步骤若干次。
+-   autoconf可能需要3-5次迭代才能见效。
 -   使用autoconf时，您可以设置让任务回追数据甚至造成反压。这样会更有利于快速体现调优成功。
 
-## 如何判断自动配置调优功能生效或出现问题？ { .section}
+## 如何判断自动配置调优功能生效或出现问题？ {#section_j4c_nn1_fhb .section}
 
 自动配置调优功能通过json配置文件与实时计算交互。您在调优后，可以通过查看json配置文件了解自动配置调优功能的运行情况。
 
@@ -109,11 +111,11 @@
 
     1.  通过作业编辑界面，如下图。
 
-        ![1](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951333886_zh-CN.png)
+        ![1](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626833886_zh-CN.png)
 
     2.  通过作业运维界面，如下图。
 
-        ![2](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155323951433887_zh-CN.png)
+        ![2](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/41063/155350626833887_zh-CN.png)
 
 -   Json 配置解释
 
@@ -141,7 +143,7 @@
             -   用户作业或blink版本有修改，autoconf无法复用以前的信息。
             -   有 XxxException 代表autoconf遇到问题，需要跟据信息、日志等综合分析。如没有足够的信息，请提交工单。
 
-## 异常信息问题 { .section}
+## 异常信息问题 {#section_awr_nn1_fhb .section}
 
 **IllegalStateException异常**
 
