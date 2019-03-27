@@ -101,7 +101,7 @@ FROM source_table
 |accessKey|填写阿里云accessKey|无|
 |producerGroup|写入的群组|无|
 |tag|写入的标签|可选，默认为空。|
-|fieldDelimiter|字段分割符|可选，默认为`\u0001` 。表示 `Crtl+A` 和 `\001`，\(暂不支持`\001`写法）。|
+|fieldDelimiter|字段分割符|可选，默认为`\u0001` 。表示在只读模式下以 `\u0001`（`\u0001`在只读模式不可见）作为分隔符；在编辑模式下以`^A`作为分隔符。|
 |encoding|编码类型|可选，默认为`utf-8`。|
 |retryTimes|写入的重试次数|可选，默认为10。|
 |sleepTimeMs|重试间隔时间|可选，默认为1000（毫秒）。|
